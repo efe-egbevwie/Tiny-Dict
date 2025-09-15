@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Tiny DIct</string>
+    <string name="title_activity_quick_look_up">QuickLookUpActivity</string>
+    <string name="define_tiny_dict">Define(Tiny Dict)</string>
+</resources>
