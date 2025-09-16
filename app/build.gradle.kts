@@ -7,13 +7,24 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+val releaseSigningConfig = "release"
+val versionName = "1.0.1"
 
 android {
     namespace = "com.efe.tinydict"
     compileSdk = 36
+    applicationVariants.all {
+        val variant = this
+        outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val appName = "TinyDict"
+            val versionName = variant.versionName
+            output.outputFileName = "$appName-$versionName.apk"
+        }
+    }
 
     signingConfigs {
-        create("release"){
+        create(releaseSigningConfig){
            storeFile = file("../keystore.jks")
             storePassword =  System.getenv("TINY_DICT_KEYSTORE_PASSWORD")
             keyAlias =  System.getenv("TINY_DICT_KEY_ALIAS")
@@ -26,7 +37,7 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -34,6 +45,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs[releaseSigningConfig]
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -1,21 +1,21 @@
 package com.efe.tinydict.screens
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.efe.tinydict.domain.DictionaryEntry
@@ -26,17 +26,14 @@ fun DefinitionItem(
     dictionaryEntry: DictionaryEntry,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    TinyDictCard(
         modifier = modifier.animateContentSize()
     ) {
-
         Text(
             text = dictionaryEntry.word,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
-
-        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = dictionaryEntry.partOfSpeech.orEmpty(),
@@ -46,16 +43,15 @@ fun DefinitionItem(
             color = MaterialTheme.colorScheme.secondary
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         SelectionContainer {
             Text(
                 text = dictionaryEntry.definition,
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+                    .fillMaxWidth()
             )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "TinyDict",
@@ -69,22 +65,20 @@ fun DefinitionItem(
 
 @Composable
 fun NoDefinitionFound(word: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    TinyDictCard(modifier = modifier) {
         Text(
             text = word,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
-
-
         Text(
             text = "No Definition found",
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "TinyDict",
@@ -98,13 +92,14 @@ fun NoDefinitionFound(word: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun NoWordSelectedItem(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    TinyDictCard(modifier = modifier) {
         Text(
             text = "No word selected",
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "TinyDict",
@@ -117,21 +112,20 @@ fun NoWordSelectedItem(modifier: Modifier = Modifier) {
 
 @Composable
 fun SearchingForDefinition(word: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    TinyDictCard(modifier = modifier) {
         Text(
             text = word,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         Text(
             text = "Searching for definition...",
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Start,
+            modifier = Modifier
+                .fillMaxWidth()
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "TinyDict",
@@ -142,11 +136,24 @@ fun SearchingForDefinition(word: String, modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+private fun TinyDictCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Card(modifier = modifier) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            content()
+        }
+    }
+}
+
 private val itemModifier =
     Modifier
-        .background(color = Color.Unspecified, shape = RoundedCornerShape(10.dp))
-        .padding(20.dp)
-
+        .padding(6.dp)
 
 @PreviewLightDark
 @Composable
@@ -162,7 +169,6 @@ private fun DefinitionPreview() {
         )
     }
 }
-
 
 @PreviewLightDark
 @Composable
@@ -180,10 +186,9 @@ private fun NoDefinitionFoundPreview() {
     }
 }
 
-
 @PreviewLightDark
 @Composable
-private fun NoWordSelectedPreview(){
+private fun NoWordSelectedPreview() {
     TinyDIctTheme {
         NoWordSelectedItem(modifier = itemModifier)
     }

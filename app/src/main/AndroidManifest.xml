@@ -13,6 +13,7 @@
         <activity
             android:name=".QuickLookUpActivity"
             android:exported="true"
+            android:excludeFromRecents="true"
             android:label="@string/title_activity_quick_look_up"
             android:theme="@style/Theme.TinyDict.Dialog" >
 
@@ -40,11 +41,7 @@
 
                 <data android:scheme="https" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 
