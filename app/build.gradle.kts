@@ -8,17 +8,15 @@ plugins {
     alias(libs.plugins.ksp)
 }
 val releaseSigningConfig = "release"
-val versionName = "1.0.1"
+val tinyDictVersionName = "1.0.2"
 
 android {
     namespace = "com.efe.tinydict"
     compileSdk = 36
     applicationVariants.all {
-        val variant = this
         outputs.all {
             val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
             val appName = "TinyDict"
-            val versionName = variant.versionName
             output.outputFileName = "$appName-$versionName.apk"
         }
     }
@@ -37,7 +35,7 @@ android {
         minSdk = 24
         targetSdk = 36
         versionCode = 1
-        versionName = versionName
+        versionName = tinyDictVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
