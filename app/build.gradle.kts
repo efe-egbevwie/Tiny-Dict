@@ -6,9 +6,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinx.serialization)
 }
 val releaseSigningConfig = "release"
-val tinyDictVersionName = "1.0.2"
+val tinyDictVersionName = "1.0.3"
 
 android {
     namespace = "com.efe.tinydict"
@@ -36,8 +37,9 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = tinyDictVersionName
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        val dictionaryApiKey = "\"${System.getenv("DICT_API_KEY")}\""
+        buildConfigField(type = "String", name = "API_KEY", value = dictionaryApiKey)
     }
 
     buildTypes {
@@ -61,6 +63,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -79,6 +82,15 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    //ktor and network
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.cio.engine)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.ktor.client.logging)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
