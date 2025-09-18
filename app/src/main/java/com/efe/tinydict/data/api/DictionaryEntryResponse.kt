@@ -1,6 +1,6 @@
 package com.efe.tinydict.data.api
 
-import com.efe.tinydict.domain.DictionaryEntry
+import com.efe.tinydict.domain.Definition
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,8 +14,7 @@ data class Entry(
     val shortDefinitions: List<String>? = null,
 )
 
-fun Entry.toDomainDictionaryEntry(word: String): DictionaryEntry = DictionaryEntry(
-    word = word,
-    partOfSpeech = this.functionLabel,
-    definition = this.shortDefinitions?.first().orEmpty()
+fun Entry.toDomainDefinition(): Definition = Definition(
+    functionalLabel = this.functionLabel,
+    definition = this.shortDefinitions?.joinToString("\n")
 )

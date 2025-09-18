@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ class QuickLookUpActivity : ComponentActivity() {
                 BoxWithConstraints{
                     val constraints = this
                     val maxWidth = constraints.maxWidth
+
                     QuickLookupDialog(
                         isLoading = isLookingUp,
                         word = wordToLookup,
