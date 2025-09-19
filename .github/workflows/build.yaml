@@ -40,6 +40,8 @@ jobs:
         env:
           TINY_DICT_KEY_ALIAS: ${{ secrets.TINY_DICT_KEY_ALIAS }}
           TINY_DICT_KEYSTORE_PASSWORD: ${{ secrets.TINY_DICT_KEYSTORE_PASSWORD }}
+          DICT_API_KEY: ${{ secrets. DICT_API_KEY}}
+
         run: |
           export TINY_DICT_PASSWORD=${{ secrets.TINY_DICT_PASSWORD }}
           export TINY_DICT_ALIAS=${{ secrets.TINY_DICT_ALIAS }}

@@ -1,12 +1,6 @@
 package com.efe.tinydict.screens
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.snap
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -14,20 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,29 +23,23 @@ import androidx.compose.ui.unit.dp
 import com.efe.tinydict.domain.Definition
 import com.efe.tinydict.domain.DictionaryEntry
 import com.efe.tinydict.ui.theme.TinyDIctTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun DefinitionItem(
     dictionaryEntry: DictionaryEntry,
     modifier: Modifier = Modifier,
-    pagerState: PagerState = rememberPagerState(pageCount = {
-        dictionaryEntry.definition?.size ?: 1
-    })
 ) {
-    TinyDictCard(
-        modifier = modifier.animateContentSize(animationSpec = snap())
-    ) {
+    TinyDictCard(modifier = modifier) {
         Text(
             text = dictionaryEntry.word,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
 
-        HorizontalPager(state = pagerState) { page: Int ->
-            Column {
+        dictionaryEntry.definition?.forEachIndexed { index: Int, definition: Definition ->
+            Column(modifier = Modifier.padding(vertical = 6.dp)) {
                 Text(
-                    text = dictionaryEntry.definition?.get(page)?.functionalLabel.orEmpty(),
+                    text = definition.functionalLabel.orEmpty(),
                     fontStyle = FontStyle.Italic,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
@@ -67,43 +48,36 @@ fun DefinitionItem(
 
                 Spacer(modifier = Modifier.height(6.dp))
 
-                SelectionContainer {
+                Row {
                     Text(
-                        text = dictionaryEntry.definition?.get(page)?.definition ?: "",
+                        text = "${index.plus(1)}: ",
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Start,
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .padding(end = 2.dp)
                     )
+                    SelectionContainer {
+                        Text(
+                            text = definition.definition.orEmpty(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
+                    }
                 }
             }
         }
 
-        val scope = rememberCoroutineScope()
-
         Spacer(modifier = Modifier.height(6.dp))
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            PagerIndicator(
-                currentIndex = pagerState.currentPage,
-                pageCount = pagerState.pageCount,
-                modifier = Modifier,
-                onClick = { index ->
-                    scope.launch {
-                        pagerState.scrollToPage(index)
-                    }
-                }
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Text(
-                text = "TinyDict",
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Black,
-            )
-        }
-
+        Text(
+            text = "TinyDict",
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Black,
+            modifier = Modifier
+                .align(Alignment.End)
+        )
     }
 }
 
@@ -196,45 +170,6 @@ private fun TinyDictCard(
     }
 }
 
-@Composable
-private fun PagerIndicator(
-    currentIndex: Int,
-    pageCount: Int,
-    modifier: Modifier = Modifier,
-    onClick: (index: Int) -> Unit
-) {
-    if (pageCount <= 1) return
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-        repeat(pageCount) { index ->
-            PagerIndicatorCircle(
-                selected = currentIndex == index,
-                modifier = Modifier
-                    .size(8.dp)
-                    .clickable {
-                        onClick(index)
-                    }
-            )
-        }
-    }
-}
-
-@Composable
-private fun PagerIndicatorCircle(selected: Boolean, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .then(Modifier)
-            .clip(CircleShape)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface,
-                shape = CircleShape
-            )
-            .background(
-                if (selected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary
-            )
-    )
-}
-
 private val itemModifier =
     Modifier
         .padding(6.dp)
@@ -246,16 +181,20 @@ private fun DefinitionPreview() {
         DefinitionItem(
             modifier = itemModifier,
             dictionaryEntry = DictionaryEntry(
-                word = "Day",
+                word = "Shadow",
                 definition = listOf(
                     Definition(
-                        functionalLabel = "n",
-                        definition = "The time of light, or interval between one night and the next; the time between sunrise and sunset, or from dawn to darkness; hence, the light; sunshine."
+                        functionalLabel = "noun",
+                        definition = "the dark figure cast upon a surface by a body intercepting the rays from a source of light\n" +
+                                "partial darkness or obscurity within a part of space from which rays from a source of light are cut off by an interposed opaque body\n" +
+                                "a small degree or portion : trace"
                     ),
                     Definition(
-                        functionalLabel = "n",
-                        definition = "The time of light, or interval between one night and the next; the time between sunrise and sunset, or from dawn to darkness; hence, the light; sunshine."
-                    )
+                        functionalLabel = "verb",
+                        definition = "to cast a shadow upon : cloud\n" +
+                                "to follow especially secretly : trail\n" +
+                                "to accompany and observe especially in a professional setting"
+                    ),
                 )
             )
         )
