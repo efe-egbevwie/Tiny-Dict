@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,13 +30,32 @@ import com.efe.tinydict.ui.theme.TinyDIctTheme
 fun DefinitionItem(
     dictionaryEntry: DictionaryEntry,
     modifier: Modifier = Modifier,
+    onRequestApiDefinition: (word: String) -> Unit = {},
 ) {
     Column(modifier = modifier) {
-        Text(
-            text = dictionaryEntry.word,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = dictionaryEntry.word,
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            IconButton(
+                onClick = {
+                    onRequestApiDefinition(dictionaryEntry.word)
+                }
+            ) {
+                Icon(
+                    imageVector = InternetIcon,
+                    contentDescription = null
+                )
+            }
+        }
 
         dictionaryEntry.definition?.forEachIndexed { index: Int, definition: Definition ->
             Column(modifier = Modifier.padding(vertical = 6.dp)) {

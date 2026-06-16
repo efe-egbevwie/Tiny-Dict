@@ -11,14 +11,19 @@ fun QuickLookupDialog(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
     word: String? = null,
-    dictionaryEntry: DictionaryEntry? = null
-){
-    TinyDictCard(modifier = modifier){
-        when{
-            isLoading  && word != null -> SearchingForDefinition(word = word, modifier = Modifier)
+    dictionaryEntry: DictionaryEntry? = null,
+    onRequestApiDefinition: (word: String) -> Unit = {},
+) {
+    TinyDictCard(modifier = modifier) {
+        when {
+            isLoading && word != null -> SearchingForDefinition(word = word, modifier = Modifier)
             word.isNullOrBlank() -> NoWordSelectedItem(modifier = Modifier)
-            dictionaryEntry == null  -> NoDefinitionFound(word = word, modifier = Modifier)
-            else -> DefinitionItem(dictionaryEntry = dictionaryEntry, modifier = Modifier.verticalScroll(state = rememberScrollState()))
+            dictionaryEntry == null -> NoDefinitionFound(word = word, modifier = Modifier)
+            else -> DefinitionItem(
+                dictionaryEntry = dictionaryEntry,
+                modifier = Modifier.verticalScroll(state = rememberScrollState()),
+                onRequestApiDefinition = onRequestApiDefinition,
+            )
         }
     }
 }

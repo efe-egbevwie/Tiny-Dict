@@ -29,11 +29,12 @@ class QuickLookUpActivity : ComponentActivity() {
         this.setFinishOnTouchOutside(true)
 
         val wordToLookup: String = when {
-            intent.hasExtra(Intent.EXTRA_PROCESS_TEXT) -> 
+            intent.hasExtra(Intent.EXTRA_PROCESS_TEXT) ->
                 intent.getCharSequenceExtra(Intent.EXTRA_PROCESS_TEXT)?.toString()?.trim() ?: ""
 
-            intent.hasExtra(Intent.EXTRA_TEXT) -> 
+            intent.hasExtra(Intent.EXTRA_TEXT) ->
                 intent.getStringExtra(Intent.EXTRA_TEXT)?.trim() ?: ""
+
             else -> ""
         }
         viewModel.lookupWord(wordToLookup)
@@ -43,7 +44,7 @@ class QuickLookUpActivity : ComponentActivity() {
             val lookupResult: DictionaryEntry? by viewModel.dictionaryEntryResult.collectAsStateWithLifecycle()
 
             TinyDIctTheme {
-                BoxWithConstraints{
+                BoxWithConstraints {
                     val constraints = this
                     val maxWidth = constraints.maxWidth
 
@@ -51,6 +52,12 @@ class QuickLookUpActivity : ComponentActivity() {
                         isLoading = isLookingUp,
                         word = wordToLookup,
                         dictionaryEntry = lookupResult,
+                        onRequestApiDefinition = { word: String ->
+                            viewModel.lookupWord(
+                                word = word,
+                                useApi = true
+                            )
+                        },
                         modifier = Modifier
                             .widthIn(min = maxWidth.div(2))
                     )

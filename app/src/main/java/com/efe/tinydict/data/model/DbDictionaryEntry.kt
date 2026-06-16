@@ -18,10 +18,25 @@ data class DbDictionaryEntry(
 )
 
 fun DbDictionaryEntry.toDomainDictionaryEntry(jsonDecoder: Json): DictionaryEntry {
-    val definitions = jsonDecoder.decodeFromString<List<Definition>>(this.definitions)
+    val definitions: List<Definition> = jsonDecoder.decodeFromString<List<Definition>>(this.definitions)
+        .distinct()
 
     return DictionaryEntry(
         word = this.word,
+        definition = definitions
+    )
+}
+
+fun List<DbDictionaryEntry?>.toDomainDictionaryEntry(jsonDecoder: Json): DictionaryEntry {
+    val definitions: List<Definition> = this.map { it?.definitions }
+        .distinct()
+        .flatMap { definition: String? ->
+            if (definition == null) return@flatMap emptyList()
+            jsonDecoder.decodeFromString<List<Definition>>(definition)
+        }
+
+    return DictionaryEntry(
+        word = this.firstOrNull()?.word.orEmpty(),
         definition = definitions
     )
 }

@@ -30,8 +30,10 @@ class DictionaryRepository(
         }
     }
 
-    suspend fun getEntryByWord(word: String): DictionaryEntry? {
+    suspend fun getEntryByWord(word: String, useApi: Boolean = false): DictionaryEntry? {
         return try {
+            if (useApi) return getEntryFromDictionaryApi(word)
+
             val localResult: DictionaryEntry? = getLocallySavedEntry(word)
             return localResult ?: getEntryFromDictionaryApi(word)
         } catch (e: Exception) {
@@ -44,7 +46,7 @@ class DictionaryRepository(
 
     private suspend fun getLocallySavedEntry(word: String): DictionaryEntry? {
         return dictionaryDao.getEntryByWord(word)
-            ?.toDomainDictionaryEntry(jsonDecoder = jsonSerializer)
+            .toDomainDictionaryEntry(jsonDecoder = jsonSerializer)
     }
 
     private suspend fun getEntryFromDictionaryApi(word: String): DictionaryEntry {
@@ -66,6 +68,6 @@ class DictionaryRepository(
             word = word,
             definitions = jsonSerializer.encodeToString(definitions)
         )
-        dictionaryDao.insert(dbDictionaryEntry)
+        dictionaryDao.replace(word = word, newEntry = dbDictionaryEntry)
     }
 }

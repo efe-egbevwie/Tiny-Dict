@@ -17,10 +17,10 @@ class LookupViewModel(
     val isLoading = MutableStateFlow(false)
     val dictionaryEntryResult = MutableStateFlow<DictionaryEntry?>(null)
 
-    fun lookupWord(word: String) = viewModelScope.launch {
+    fun lookupWord(word: String, useApi: Boolean = false) = viewModelScope.launch {
         if (word.isBlank()) return@launch
         isLoading.update { true }
-        val result: DictionaryEntry? = dictionaryRepository.getEntryByWord(word)
+        val result: DictionaryEntry? = dictionaryRepository.getEntryByWord(word = word, useApi = useApi)
         if (result != null) dictionaryEntryResult.update { result }
         isLoading.update { false }
     }
