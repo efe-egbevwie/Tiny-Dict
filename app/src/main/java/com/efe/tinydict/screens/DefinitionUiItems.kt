@@ -29,7 +29,7 @@ fun DefinitionItem(
     dictionaryEntry: DictionaryEntry,
     modifier: Modifier = Modifier,
 ) {
-    TinyDictCard(modifier = modifier) {
+    Column(modifier = modifier) {
         Text(
             text = dictionaryEntry.word,
             style = MaterialTheme.typography.headlineMedium,
@@ -84,7 +84,7 @@ fun DefinitionItem(
 
 @Composable
 fun NoDefinitionFound(word: String, modifier: Modifier = Modifier) {
-    TinyDictCard(modifier = modifier) {
+    Column(modifier = modifier) {
         Text(
             text = word,
             style = MaterialTheme.typography.headlineMedium,
@@ -111,7 +111,7 @@ fun NoDefinitionFound(word: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun NoWordSelectedItem(modifier: Modifier = Modifier) {
-    TinyDictCard(modifier = modifier) {
+    Column(modifier = modifier) {
         Text(
             text = "No word selected",
             style = MaterialTheme.typography.bodyLarge,
@@ -131,7 +131,7 @@ fun NoWordSelectedItem(modifier: Modifier = Modifier) {
 
 @Composable
 fun SearchingForDefinition(word: String, modifier: Modifier = Modifier) {
-    TinyDictCard(modifier = modifier) {
+    Column(modifier = modifier) {
         Text(
             text = word,
             style = MaterialTheme.typography.headlineMedium,
@@ -156,7 +156,7 @@ fun SearchingForDefinition(word: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun TinyDictCard(
+fun TinyDictCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
