@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 val releaseSigningConfig = "release"
-val tinyDictVersionName = "1.2.1"
+val tinyDictVersionName = "1.2.2"
 
 android {
     namespace = "com.efe.tinydict"

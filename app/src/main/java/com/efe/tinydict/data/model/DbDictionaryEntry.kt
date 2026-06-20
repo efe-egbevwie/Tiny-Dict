@@ -23,7 +23,7 @@ fun DbDictionaryEntry.toDomainDictionaryEntry(jsonDecoder: Json): DictionaryEntr
 
     return DictionaryEntry(
         word = this.word,
-        definition = definitions
+        definitions = definitions
     )
 }
 
@@ -37,7 +37,7 @@ fun List<DbDictionaryEntry?>.toDomainDictionaryEntry(jsonDecoder: Json): Diction
 
     return DictionaryEntry(
         word = this.firstOrNull()?.word.orEmpty(),
-        definition = definitions
+        definitions = definitions
     )
 }
 

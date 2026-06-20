@@ -35,7 +35,11 @@ class DictionaryRepository(
             if (useApi) return getEntryFromDictionaryApi(word)
 
             val localResult: DictionaryEntry? = getLocallySavedEntry(word)
-            return localResult ?: getEntryFromDictionaryApi(word)
+            return if (localResult?.definitions?.isNotEmpty() == true){
+                localResult
+            }else{
+                getEntryFromDictionaryApi(word)
+            }
         } catch (e: Exception) {
             if (BuildConfig.DEBUG) {
                 Log.e(tag, "error fetching entry", e)
@@ -56,7 +60,7 @@ class DictionaryRepository(
         }
         return DictionaryEntry(
             word = word,
-            definition = apiResult.map { it.toDomainDefinition() }
+            definitions = apiResult.map { it.toDomainDefinition() }
         )
     }
 

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DictionaryEntry(
     val word: String,
-    val definition: List<Definition>? = emptyList()
+    val definitions: List<Definition>? = emptyList()
 )
 
 @Serializable

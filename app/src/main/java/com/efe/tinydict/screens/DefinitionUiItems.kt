@@ -57,7 +57,7 @@ fun DefinitionItem(
             }
         }
 
-        dictionaryEntry.definition?.forEachIndexed { index: Int, definition: Definition ->
+        dictionaryEntry.definitions?.forEachIndexed { index: Int, definition: Definition ->
             Column(modifier = Modifier.padding(vertical = 6.dp)) {
                 Text(
                     text = definition.functionalLabel.orEmpty(),
@@ -203,7 +203,7 @@ private fun DefinitionPreview() {
             modifier = itemModifier,
             dictionaryEntry = DictionaryEntry(
                 word = "Shadow",
-                definition = listOf(
+                definitions = listOf(
                     Definition(
                         functionalLabel = "noun",
                         definition = "the dark figure cast upon a surface by a body intercepting the rays from a source of light\n" +
